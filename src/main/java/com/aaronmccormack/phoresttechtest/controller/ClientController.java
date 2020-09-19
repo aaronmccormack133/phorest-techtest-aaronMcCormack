@@ -47,7 +47,7 @@ public class ClientController {
 		else if(mobile != null && !mobile.isEmpty()){
 			URI targetUrl = UriComponentsBuilder.fromUriString(urlEndpoint)
 					.path("/client/")
-					.queryParam("mobile", mobile)
+					.queryParam("phone", mobile)
 					.build()
 					.encode()
 					.toUri();
