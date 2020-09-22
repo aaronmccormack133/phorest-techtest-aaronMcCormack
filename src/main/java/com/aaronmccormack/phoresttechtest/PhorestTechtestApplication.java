@@ -9,7 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PhorestTechtestApplication implements CommandLineRunner {
+public class PhorestTechtestApplication  {
 
 	@Autowired
 	public ClientController clientController;
@@ -21,9 +21,9 @@ public class PhorestTechtestApplication implements CommandLineRunner {
 
 	}
 
-	@Override
-	public void run(String... args) throws Exception {
-		Logger.info("Calling service");
-		Logger.info(clientController.getAllClients("", "2539988369509"));
-	}
+//	@Override
+//	public void run(String... args) throws Exception {
+//		Logger.info("Calling service");
+//		Logger.info(clientController.getClients("", "2539988369509"));
+//	}
 }
