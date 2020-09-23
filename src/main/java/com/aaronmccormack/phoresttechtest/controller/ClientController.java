@@ -27,14 +27,13 @@ import java.util.List;
 public class ClientController {
 
 	// the API endpoint
-	private final String urlEndpoint = "http://api-gateway-dev.phorest.com/third-party-api-server/api/business/" + System.getenv("phorest-businessId") + "/";
+	private final String urlEndpoint = "http://api-gateway-dev.phorest.com/third-party-api-server/api/business/" + System.getenv("phorest-businessId");
 
 	private final RestOperations restTemplate;
 
 	// Basic authentication to add to all of the requests sent to the API
 	public ClientController(RestTemplateBuilder restTemplateBuilder){
 		this.restTemplate = restTemplateBuilder
-				.additionalMessageConverters(Traverson.getDefaultMessageConverters(MediaTypes.HAL_JSON))
 				.setConnectTimeout(Duration.ofSeconds(10))
 				.setReadTimeout(Duration.ofSeconds(10))
 				.basicAuthentication(System.getenv("phorest-username"), System.getenv("phorest-password"))
@@ -46,11 +45,8 @@ public class ClientController {
 		// TODO: Handle for multiple users
 		// construct for Voucher
 		// construct for UI
+		System.out.println("one");
 		ObjectMapper om = new ObjectMapper();
-		String data;
-		JsonNode jsNode;
-		String getData;
-
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("index");
 
@@ -63,25 +59,22 @@ public class ClientController {
 					.encode() // Request to have the URI template pre-encoded at build time, and URI variables encoded separately when expanded.
 					.toUri();
 
+
+
 			ResponseEntity<String> response = restTemplate.exchange(targetUrl, HttpMethod.GET, null, String.class);
 
-			data = response.getBody();
-
-			om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-			jsNode = om.readTree(data);
-			getData = jsNode.at("/_embedded/clients").toString();
-
-			List<Client> clientList = om.readValue(getData, new TypeReference<List<Client>>() {});
+			List<Client> clientList = getClients(om, response);
 
 			mav.addObject("clientList", clientList);
+
+			System.out.println("two");
 
 			return mav;
 		}
 		// if the email string is empty and the mobile is not, construct that query
 		else if (mobile != null && !mobile.isEmpty()) {
 			URI targetUrl = UriComponentsBuilder.fromUriString(urlEndpoint)
-					.path("/client")
+					.path("/client/")
 					.queryParam("phone", mobile)
 					.build()
 					.encode()
@@ -89,21 +82,31 @@ public class ClientController {
 
 			ResponseEntity<String> response = restTemplate.exchange(targetUrl, HttpMethod.GET, null, String.class);
 
-			data = response.getBody();
-
-			om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-			jsNode = om.readTree(data);
-			getData = jsNode.at("/_embedded/clients").toString();
-
-			List<Client> clientList = om.readValue(getData, new TypeReference<List<Client>>() {});
+			List<Client> clientList = getClients(om, response);
 
 			mav.addObject("clientList", clientList);
 
 			return mav;
 		}
 
+		System.out.println("three");
+
 		return mav;
+	}
+
+	private List<Client> getClients(ObjectMapper om, ResponseEntity<String> response) throws JsonProcessingException {
+		String data;
+		JsonNode jsNode;
+		String getData;
+		data = response.getBody();
+
+		om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+		jsNode = om.readTree(data);
+		getData = jsNode.at("/_embedded/clients").toString();
+
+		return om.readValue(getData, new TypeReference<List<Client>>() {
+		});
 	}
 
 	@GetMapping

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Voucher - Phorest-Techtest</title>
+</head>
+<body>
+<h1>Create Voucher</h1>
+<form method="post" action="#" th:action="@{/voucher}" th:object="${voucherDto}">
+    <label>Input Voucher Amount</label>
+    <input type="number" min="0" th:field="*{amount}"/>
+    <button>Submit</button>
+</form>
+</body>
+</html>

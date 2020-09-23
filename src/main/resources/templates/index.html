@@ -6,10 +6,13 @@
     <title>Phorest-Techtest</title>
 </head>
 <body>
-<h1>hello</h1>
+<h1>Phorest Techtest </h1>
+<h2>Aaron McCormack</h2>
 <div>
-    <form action="/client">
+    <form action="@{/client}">
+        <label>Search by Email:</label>
         <input type="email" name="email" placeholder="enter email"/>
+        <label>Search Mobile:</label>
         <input type="text" name="mobile" placeholder="enter phone number"/>
         <button>Submit</button>
     </form>
@@ -20,8 +23,8 @@
             <tr>
                 <td>First Name</td>
                 <td>Last Name</td>
-                <td>email</td>
-                <td>phone</td>
+                <td>Email</td>
+                <td>Phone</td>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +34,7 @@
                     <td th:text="${c.lastName}">...</td>
                     <td th:text="${c.email}">...</td>
                     <td th:text="${c.mobile}">...</td>
+                    <!-- <td><a th:href="@{'/voucher/client?clientId=' + ${c.clientId}}">Add Voucher</a></td> -->
                 </tr>
             </th:block>
         </tbody>
