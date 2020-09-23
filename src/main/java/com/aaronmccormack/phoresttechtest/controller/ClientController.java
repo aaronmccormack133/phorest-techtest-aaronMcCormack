@@ -7,6 +7,7 @@ import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.client.Traverson;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
@@ -52,12 +53,7 @@ public class ClientController {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("index");
 
-//		Traverson traverson = new Traverson(new URI(urlEndpoint), MediaTypes.HAL_JSON);
-//		Traverson.TraversalBuilder tb = traverson.follow("clients");
-//		ParameterizedTypeReference<Resources<Client>> typeReference = new ParameterizedTypeReference<Resources<Client>>() {};
-//		Resources<Client> resClient = tb.toObject(typeReference);
-		Client clientCollection = null;
-
+		ResponseEntity<Client[]> clientEntity = null;
 		// if the email string is not empty, construct that query
 		if(email != null && !email.isEmpty()){
 			URI targetUrl = UriComponentsBuilder.fromUriString(urlEndpoint)
@@ -67,7 +63,7 @@ public class ClientController {
 					.encode() // Request to have the URI template pre-encoded at build time, and URI variables encoded separately when expanded.
 					.toUri();
 
-			clientCollection = restTemplate.getForObject(targetUrl, Client.class);
+			clientEntity = restTemplate.getForEntity(targetUrl, Client[].class);
 		}
 		// if the email string is empty and the mobile is not, construct that query
 		else if(mobile != null && !mobile.isEmpty()){
@@ -78,20 +74,21 @@ public class ClientController {
 					.encode()
 					.toUri();
 
-			clientCollection = restTemplate.getForObject(targetUrl, Client.class);
+			clientEntity = restTemplate.getForEntity(targetUrl, Client[].class);
 		}
-		System.out.println(clientCollection);
-		mav.addObject("client", clientCollection);
 
+		Client[] clients = clientEntity.getBody();
+		System.out.println("out: " + clients);
+		mav.addObject(clients);
 		return mav;
 	}
 
-	@GetMapping()
+	@GetMapping("/")
 	public ModelAndView client(){
-		List<Client> clientList = new ArrayList<>();
+		List<Client> clients = new ArrayList<>();
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("index");
-		mav.addObject("client", clientList);
+		mav.addObject("client", clients);
 		mav.setViewName("index");
 		return mav;
 	}
