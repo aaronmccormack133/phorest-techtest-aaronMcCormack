@@ -17,18 +17,20 @@
 <div>
     <table>
         <thead>
-            <tr>First Name</tr>
-            <tr>Last Name</tr>
-            <tr>email</tr>
-            <tr>phone</tr>
+            <tr>
+                <td>First Name</td>
+                <td>Last Name</td>
+                <td>email</td>
+                <td>phone</td>
+            </tr>
         </thead>
         <tbody>
-            <th:block th:each="clientC : ${clientCollection}">
+            <th:block th:each="c : ${clientList}">
                 <tr>
-                    <td th:text="${clientCollection.firstName}">...</td>
-                    <td th:text="${clientCollection.lastName}">...</td>
-                    <td th:text="${clientCollection.email}">...</td>
-                    <td th:text="${clientCollection.phone}">...</td>
+                    <td th:text="${c.firstName}">...</td>
+                    <td th:text="${c.lastName}">...</td>
+                    <td th:text="${c.email}">...</td>
+                    <td th:text="${c.mobile}">...</td>
                 </tr>
             </th:block>
         </tbody>

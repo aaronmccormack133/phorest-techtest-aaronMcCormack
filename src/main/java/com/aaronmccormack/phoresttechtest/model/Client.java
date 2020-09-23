@@ -6,7 +6,7 @@ public class Client {
 	private String email;
 	private String firstName;
 	private String lastName;
-	private String phone;
+	private String mobile;
 
 	public String getClientId() {
 		return clientId;
@@ -24,7 +24,7 @@ public class Client {
 		return lastName;
 	}
 
-	public String getPhone() {
-		return phone;
+	public String getMobile() {
+		return mobile;
 	}
 }
