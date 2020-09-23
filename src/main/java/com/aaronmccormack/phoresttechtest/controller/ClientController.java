@@ -45,7 +45,6 @@ public class ClientController {
 		// TODO: Handle for multiple users
 		// construct for Voucher
 		// construct for UI
-		System.out.println("one");
 		ObjectMapper om = new ObjectMapper();
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("index");
@@ -67,8 +66,6 @@ public class ClientController {
 
 			mav.addObject("clientList", clientList);
 
-			System.out.println("two");
-
 			return mav;
 		}
 		// if the email string is empty and the mobile is not, construct that query
@@ -88,8 +85,6 @@ public class ClientController {
 
 			return mav;
 		}
-
-		System.out.println("three");
 
 		return mav;
 	}
