@@ -9,7 +9,7 @@
 <h1>Create Voucher</h1>
 <form method="post" action="#" th:action="@{/voucher}" th:object="${voucherDto}">
     <label>Input Voucher Amount</label>
-    <input type="hidden" th:value="c.clientId"/>
+    <input type="hidden" th:value="${clientId}" th:attr="name='clientId'"/>
     <input type="number" min="0" name="originalBalance"/>
     <button>Submit</button>
 </form>

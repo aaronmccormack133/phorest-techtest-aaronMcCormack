@@ -36,21 +36,25 @@ public class VoucherController {
 	}
 
 	@PostMapping(value = "/voucher", produces = "application/json")
-	public void postVoucher(@ModelAttribute("voucherDTO") VoucherDTO voucherDto) throws JsonProcessingException {
+	public void postVoucher(@ModelAttribute("voucherDTO") VoucherDTO voucherDto, @RequestParam String clientId) throws JsonProcessingException {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
+
 		Voucher voucher = new Voucher(voucherDto.getClientId(), System.getenv("phorest-branchId"), voucherDto.getOriginalBalance());
+
+		if(voucherDto.getOriginalBalance() <= 0){
+			throw new IllegalArgumentException("Must be a positive figure");
+		}
 
 		String targetUrl = urlEndpoint + "/voucher";
 
 		ObjectMapper map = new ObjectMapper();
 		String json = map.writeValueAsString(voucher);
+		System.out.println(json);
 
 		HttpEntity httpEntity = new HttpEntity<>(json, headers);
-		System.out.println(json);
-//		System.out.println(httpEntity);
 		ResponseEntity<Voucher> response = restTemplate.postForEntity(targetUrl, httpEntity, Voucher.class);
 
 		if(response.getStatusCode() == HttpStatus.CREATED){

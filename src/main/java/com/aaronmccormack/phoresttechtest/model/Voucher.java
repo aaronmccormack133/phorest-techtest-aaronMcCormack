@@ -1,6 +1,6 @@
 package com.aaronmccormack.phoresttechtest.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Voucher {
@@ -13,8 +13,8 @@ public class Voucher {
 	public Voucher(String clientId, String branchId, Double originalBalance) {
 		this.clientId = clientId;
 		this.creatingBranchId = branchId;
-		this.expiryDate = DateTimeFormatter.ISO_DATE.format(LocalDate.now().plusYears(1));
-		this.issueDate = DateTimeFormatter.ISO_DATE.format(LocalDate.now());
+		this.expiryDate = DateTimeFormatter.ISO_DATE.format(LocalDateTime.now().plusYears(1));
+		this.issueDate = DateTimeFormatter.ISO_DATE.format(LocalDateTime.now());
 		this.originalBalance = originalBalance;
 	}
 }

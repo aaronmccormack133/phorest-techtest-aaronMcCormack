@@ -1,6 +1,7 @@
 package com.aaronmccormack.phoresttechtest.controller;
 
 import com.aaronmccormack.phoresttechtest.model.Client;
+import com.aaronmccormack.phoresttechtest.model.VoucherDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -63,7 +64,6 @@ public class ClientController {
 			ResponseEntity<String> response = restTemplate.exchange(targetUrl, HttpMethod.GET, null, String.class);
 
 			List<Client> clientList = getClients(om, response);
-
 			mav.addObject("clientList", clientList);
 
 			return mav;
@@ -80,7 +80,6 @@ public class ClientController {
 			ResponseEntity<String> response = restTemplate.exchange(targetUrl, HttpMethod.GET, null, String.class);
 
 			List<Client> clientList = getClients(om, response);
-
 			mav.addObject("clientList", clientList);
 
 			return mav;
@@ -98,7 +97,9 @@ public class ClientController {
 		om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 		jsNode = om.readTree(data);
+
 		getData = jsNode.at("/_embedded/clients").toString();
+
 
 		return om.readValue(getData, new TypeReference<List<Client>>() {
 		});
