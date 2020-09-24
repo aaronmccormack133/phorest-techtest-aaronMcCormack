@@ -11,19 +11,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class PhorestTechtestApplication  {
 
-	@Autowired
-	public ClientController clientController;
-
-	public static final org.slf4j.Logger Logger = LoggerFactory.getLogger(PhorestTechtestApplication.class);
-
 	public static void main(String[] args) {
 		SpringApplication.run(PhorestTechtestApplication.class, args);
 
 	}
-
-//	@Override
-//	public void run(String... args) throws Exception {
-//		Logger.info("Calling service");
-//		Logger.info(clientController.getClients("", "2539988369509"));
-//	}
 }
