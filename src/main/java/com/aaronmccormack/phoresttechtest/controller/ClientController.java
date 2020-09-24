@@ -1,15 +1,12 @@
 package com.aaronmccormack.phoresttechtest.controller;
 
 import com.aaronmccormack.phoresttechtest.model.Client;
-import com.aaronmccormack.phoresttechtest.model.VoucherDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.hateoas.MediaTypes;
-import org.springframework.hateoas.client.Traverson;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -47,8 +44,9 @@ public class ClientController {
 		// construct for Voucher
 		// construct for UI
 		ObjectMapper om = new ObjectMapper();
+		// Set the view for mav to construct when the method is called
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("index");
+		mav.setViewName("index"); // index is the html file
 
 		// if the email string is not empty, construct that query
 		if (email != null && !email.isEmpty()) {
@@ -59,10 +57,9 @@ public class ClientController {
 					.encode() // Request to have the URI template pre-encoded at build time, and URI variables encoded separately when expanded.
 					.toUri();
 
-
-
 			ResponseEntity<String> response = restTemplate.exchange(targetUrl, HttpMethod.GET, null, String.class);
 
+			// Puts the JSON node into a List
 			List<Client> clientList = getClients(om, response);
 			mav.addObject("clientList", clientList);
 
@@ -79,6 +76,7 @@ public class ClientController {
 
 			ResponseEntity<String> response = restTemplate.exchange(targetUrl, HttpMethod.GET, null, String.class);
 
+			// Puts the JSON node into a List
 			List<Client> clientList = getClients(om, response);
 			mav.addObject("clientList", clientList);
 
@@ -88,6 +86,7 @@ public class ClientController {
 		return mav;
 	}
 
+	// Extracted method to use in both if statements. This will retrieve the query body retrieved by restTemplate and query the node to get the appropriate data.
 	private List<Client> getClients(ObjectMapper om, ResponseEntity<String> response) throws JsonProcessingException {
 		String data;
 		JsonNode jsNode;
@@ -100,11 +99,11 @@ public class ClientController {
 
 		getData = jsNode.at("/_embedded/clients").toString();
 
-
 		return om.readValue(getData, new TypeReference<List<Client>>() {
 		});
 	}
 
+	// The default state for the View
 	@GetMapping
 	public ModelAndView client(){
 		List<Client> clientList = new ArrayList<>();

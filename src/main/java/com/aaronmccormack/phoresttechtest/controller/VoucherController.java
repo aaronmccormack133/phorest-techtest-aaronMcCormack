@@ -4,17 +4,13 @@ import com.aaronmccormack.phoresttechtest.model.Voucher;
 import com.aaronmccormack.phoresttechtest.model.VoucherDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.minidev.json.JSONObject;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
 import java.time.Duration;
 import java.util.Collections;
 
@@ -37,26 +33,31 @@ public class VoucherController {
 
 	@PostMapping(value = "/voucher", produces = "application/json")
 	public void postVoucher(@ModelAttribute("voucherDTO") VoucherDTO voucherDto, @RequestParam String clientId) throws JsonProcessingException {
+		// Setting the headers to send the POST request
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
-
+		// Structure voucher model
 		Voucher voucher = new Voucher(voucherDto.getClientId(), System.getenv("phorest-branchId"), voucherDto.getOriginalBalance());
 
+		// Check that the balance isn't less than 0
 		if(voucherDto.getOriginalBalance() <= 0){
 			throw new IllegalArgumentException("Must be a positive figure");
 		}
 
+		// the endpoint
 		String targetUrl = urlEndpoint + "/voucher";
 
+		// Map the Voucher model to JSON object for POST
 		ObjectMapper map = new ObjectMapper();
 		String json = map.writeValueAsString(voucher);
-		System.out.println(json);
 
 		HttpEntity httpEntity = new HttpEntity<>(json, headers);
+		// Post to the urlEndpoint with body and headers, for the Voucher model
 		ResponseEntity<Voucher> response = restTemplate.postForEntity(targetUrl, httpEntity, Voucher.class);
 
+		// Check that the response code was 201 so the post was created successfully
 		if(response.getStatusCode() == HttpStatus.CREATED){
 			System.out.println("Post Created");
 		}
@@ -66,6 +67,8 @@ public class VoucherController {
 		}
 	}
 
+	// ClientId is here
+	// Default state for the voucher
 	@GetMapping("/voucher/client")
 	public ModelAndView voucher(@RequestParam String clientId){
 		ModelAndView mav = new ModelAndView();
